@@ -15,8 +15,14 @@
                     "value_source": "dialogues"
                 },
                 {
-                    "name": "choice_options",
-                    "datatype": "int"
+                    "name": "response1",
+                    "datatype": "string",
+                    "value_source": "dialogues"
+                },
+                {
+                    "name": "response2",
+                    "datatype": "string",
+                    "value_source": "dialogues"
                 },
                 {
                     "name": "emotion",
@@ -47,10 +53,6 @@
                     "name": "leader",
                     "datatype": "string",
                     "value_source": "first_names"
-                },
-                {
-                    "name": "members",
-                    "datatype": "int"
                 },
                 {
                     "name": "founded_year",
@@ -166,10 +168,6 @@
                     "name": "kingdom",
                     "datatype": "string",
                     "value_source": "kingdom_names"
-                },
-                {
-                    "name": "n_members",
-                    "datatype": "int"
                 }
             ]
         },
