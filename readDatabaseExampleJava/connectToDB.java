@@ -5,11 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-public class ConnectToDB {
-    private static final Logger logger = Logger.getLogger(ConnectToDB.class.getName());
+public class connectToDB {
+    private static final Logger logger = Logger.getLogger(connectToDB.class.getName());
     private Connection connection = null;
 
-    public ConnectToDB(String DATABASE_URL, String USERNAME, String PASSWORD) {
+    public connectToDB(String DATABASE_URL, String USERNAME, String PASSWORD) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
