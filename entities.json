@@ -50,11 +50,6 @@
                     "value_source": "guild_types"
                 },
                 {
-                    "name": "leader",
-                    "datatype": "string",
-                    "value_source": "first_names"
-                },
-                {
                     "name": "founded_year",
                     "datatype": "int"
                 }
@@ -88,11 +83,6 @@
                     "name": "class",
                     "datatype": "string",
                     "value_source": "class_names"
-                },
-                {
-                    "name": "guild",
-                    "datatype": "string",
-                    "value_source": "guild_names"
                 },
                 {
                     "name": "last_login",
