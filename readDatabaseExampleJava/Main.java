@@ -17,18 +17,13 @@ public class Main {
             preparedStatement.executeUpdate();
 
             HashMap<String, LinkedList<String[]>> records = separateEntities("C:\\Users\\benia\\PycharmProjects\\databases\\mystic_quest\\generated_entities.txt");
+            HashMap<String, LinkedList<String[]>> relations = separateRelations("C:\\Users\\benia\\PycharmProjects\\databases\\mystic_quest\\generated_events.txt");
             String[] TableNames = new String[] {"Event", "Guild", "Enemy", "NPC", "Dialogue", "Item", "Team", "Player"};
-
-//            Solving issue of every player having a guild associated to them
-//            HashMap<String, Integer> Guilds = new HashMap<>();
-//            LinkedList<String[]> guilds = records.get("Guild");
-//            for (String[] guild : guilds) Guilds.put(guild[1], Integer.getInteger(guild[0]));
-//            LinkedList<String[]> players = records.get("Player");
-//            for (String[] player : players) {
-//                String guildIndex = String.valueOf(Guilds.get(player[6]));
-//                if (!guildIndex.equals("null")) player[6] = guildIndex;
-//                else player[6] = "NULL";
-//            }
+            String[] relationNames = new String[] {
+                    "item_with_npc", "npc_with_dialogue",
+                    "player_with_enemy", "player_with_guild",
+                    "player_with_team", "player_with_npc"
+            };
 
             for (String table : TableNames) {
                 LinkedList<String[]> entities = records.get(table);
@@ -38,6 +33,15 @@ public class Main {
                     } catch (SQLIntegrityConstraintViolationException e) {
 
                     }
+                }
+            }
+
+            for (String table : relationNames) {
+                LinkedList<String[]> entities = relations.get(table);
+                for (String[] entity : entities) {
+                    try {
+                        DataToDatabase.insertData(connection, table, entity);
+                    } catch (SQLIntegrityConstraintViolationException ignored) {}
                 }
             }
 
@@ -84,7 +88,7 @@ public class Main {
         }
 
         File file = new File(path);
-        Scanner scanner = null;
+        Scanner scanner;
         try {
             scanner = new Scanner(file);
         } catch (FileNotFoundException e) {
@@ -116,6 +120,60 @@ public class Main {
         }
         if (hasEnteredValues) {
             records.get(ObjectName).add(values);
+        }
+
+        scanner.close();
+        return records;
+    }
+
+    public static HashMap<String, LinkedList<String[]>> separateRelations(String path) {
+        HashMap<String, LinkedList<String[]>> records = new HashMap<>();
+        String[] relationNames = new String[] {
+                "item_with_npc", "npc_with_dialogue",
+                "player_with_enemy", "player_with_guild",
+                "player_with_team", "player_with_npc"
+        };
+        for (String table : relationNames) records.put(table, new LinkedList<>());
+        File file = new File(path);
+        Scanner scanner;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        String ObjectName = scanner.nextLine().split(" ")[2];
+        String[] values = new String[4];
+        if (ObjectName.equals("player_with_npc")) values = new String[6];
+        int index = 0;
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            if (line.charAt(0) == '[') {
+                String value = "";
+                if (line.contains("{")) {
+                    if (index == 5) value = line.split(" ")[3];
+                    else value = line.split(" ")[2];
+                    value = value.replace(",","");
+                } else {
+                    String[] words = line.split(" ");
+                    int addition = 0;
+                    if (index == 4) addition = 2;
+                    StringBuilder builder = new StringBuilder(words[1+addition]);
+                    for (int i = 2 + addition; i < words.length; i++) {
+                        builder.append(" ");
+                        builder.append(words[i]);
+                    }
+                    value = builder.toString();
+                }
+                values[index++] = value;
+            } else {
+                if (scanner.hasNextLine()) {
+                    records.get(ObjectName).add(values);
+                    ObjectName = scanner.nextLine().split(" ")[2];
+                    values = new String[4];
+                    if (ObjectName.equals("player_with_npc")) values = new String[6];
+                    index = 0;
+                }
+            }
         }
 
         scanner.close();
