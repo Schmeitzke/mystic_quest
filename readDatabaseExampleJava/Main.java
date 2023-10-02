@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -31,7 +32,13 @@ public class Main {
 
             for (String table : TableNames) {
                 LinkedList<String[]> entities = records.get(table);
-                for (String[] entity : entities) DataToDatabase.insertData(connection, table, entity);
+                for (String[] entity : entities) {
+                    try {
+                        DataToDatabase.insertData(connection, table, entity);
+                    } catch (SQLIntegrityConstraintViolationException e) {
+
+                    }
+                }
             }
 
         } catch (SQLException e) {

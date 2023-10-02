@@ -1,9 +1,10 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 public class DataToDatabase {
-    public static void insertData(Connection connection, String table, String[] data) {
+    public static void insertData(Connection connection, String table, String[] data) throws SQLIntegrityConstraintViolationException {
         try {
             fillNulls(data);
             StringBuilder values = new StringBuilder("(");
@@ -30,6 +31,8 @@ public class DataToDatabase {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new SQLIntegrityConstraintViolationException();
         } catch (SQLException e) {
             e.printStackTrace();
         }
