@@ -31,6 +31,7 @@ public class Main {
                     try {
                         DataToDatabase.insertData(connection, table, entity);
                     } catch (SQLIntegrityConstraintViolationException e) {
+                        int newKey = PrimaryKeyGetter.getNotUsedKey(table);
 
                     }
                 }
