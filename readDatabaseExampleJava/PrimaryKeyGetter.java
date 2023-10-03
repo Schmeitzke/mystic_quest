@@ -1,20 +1,27 @@
+package aetheriaDB;
+
 import java.util.HashMap;
-import java.util.Stack;
+import java.util.Queue;
 
 public class PrimaryKeyGetter {
-    public static HashMap<String, Stack<Integer>> map = new HashMap<String, Stack<Integer>>();
-    public static int getNotUsedKey(String tableName) {
-        Stack<Integer> stack = map.get(tableName);
+    public static HashMap<String, Queue<Integer>> map = new HashMap<String, Queue<Integer>>();
+
+    public static void fillMap() {
+
+    }
+    
+    public static int getNotUsedKey(String entity) {
+        Queue<Integer> queue = map.get(entity);
         int[] values = new int[10000];
         for (int i = 0; i < values.length; i++) {
             values[i] = i;
         }
 
-        if (stack == null || stack.isEmpty()) {
+        if (queue == null || queue.isEmpty()) {
             // get a list of values
-            // create a new stack
+            // create a new queue
         }
-        stack = map.get(tableName);
-        return stack.pop();
+        queue = map.get(entity);
+        return queue.poll();
     }
 }

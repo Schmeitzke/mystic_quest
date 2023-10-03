@@ -1,3 +1,5 @@
+package aetheriaDB;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
@@ -18,8 +20,8 @@ public class Main {
 
             HashMap<String, LinkedList<String[]>> records = separateEntities("C:\\Users\\benia\\PycharmProjects\\databases\\mystic_quest\\generated_entities.txt");
             HashMap<String, LinkedList<String[]>> relations = separateRelations("C:\\Users\\benia\\PycharmProjects\\databases\\mystic_quest\\generated_events.txt");
-            String[] TableNames = new String[] {"Event", "Guild", "Enemy", "NPC", "Dialogue", "Item", "Team", "Player"};
-            String[] relationNames = new String[] {
+            String[] TableNames = new String[]{"Event", "Guild", "Enemy", "NPC", "Dialogue", "Item", "Team", "Player"};
+            String[] relationNames = new String[]{
                     "item_with_npc", "npc_with_dialogue",
                     "player_with_enemy", "player_with_guild",
                     "player_with_team", "player_with_npc"
@@ -42,7 +44,8 @@ public class Main {
                 for (String[] entity : entities) {
                     try {
                         DataToDatabase.insertData(connection, table, entity);
-                    } catch (SQLIntegrityConstraintViolationException ignored) {}
+                    } catch (SQLIntegrityConstraintViolationException ignored) {
+                    }
                 }
             }
 
@@ -55,9 +58,9 @@ public class Main {
         HashMap<String, String> DataToTable = new HashMap<>();
         HashMap<String, Integer> TableNOValues = new HashMap<>();
         HashMap<String, LinkedList<String[]>> records = new HashMap<>();
-        String[][] DataToTableValues = new String[][] {
+        String[][] DataToTableValues = new String[][]{
                 {"questions", "Dialogue"},
-                {"GuildName","Guild"},
+                {"GuildName", "Guild"},
                 {"Character", "Player"},
                 {"Item", "Item"},
                 {"Enemy", "Enemy"},
@@ -66,7 +69,7 @@ public class Main {
                 {"NPC", "NPC"},
                 {"Vendors", "NPC"}
         };
-        String[][] TableNOValuesValues = new String[][] {
+        String[][] TableNOValuesValues = new String[][]{
                 {"Dialogue", "7"},
                 {"Guild", "4"},
                 {"Player", "11"},
@@ -76,10 +79,10 @@ public class Main {
                 {"Event", "4"},
                 {"NPC", "5"}
         };
-        String[] TableNames = new String[] {"Dialogue", "Guild", "Player", "Item", "Enemy", "Team", "Event", "NPC"};
+        String[] TableNames = new String[]{"Dialogue", "Guild", "Player", "Item", "Enemy", "Team", "Event", "NPC"};
 
         for (String[] values : DataToTableValues) {
-            DataToTable.put(values[0],values[1]);
+            DataToTable.put(values[0], values[1]);
         }
         for (String[] values : TableNOValuesValues) {
             TableNOValues.put(values[0], Integer.valueOf(values[1]));
@@ -129,7 +132,7 @@ public class Main {
 
     public static HashMap<String, LinkedList<String[]>> separateRelations(String path) {
         HashMap<String, LinkedList<String[]>> records = new HashMap<>();
-        String[] relationNames = new String[] {
+        String[] relationNames = new String[]{
                 "item_with_npc", "npc_with_dialogue",
                 "player_with_enemy", "player_with_guild",
                 "player_with_team", "player_with_npc"
@@ -149,16 +152,16 @@ public class Main {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             if (line.charAt(0) == '[') {
-                String value = "";
+                String value;
                 if (line.contains("{")) {
                     if (index == 5) value = line.split(" ")[3];
                     else value = line.split(" ")[2];
-                    value = value.replace(",","");
+                    value = value.replace(",", "");
                 } else {
                     String[] words = line.split(" ");
                     int addition = 0;
                     if (index == 4) addition = 2;
-                    StringBuilder builder = new StringBuilder(words[1+addition]);
+                    StringBuilder builder = new StringBuilder(words[1 + addition]);
                     for (int i = 2 + addition; i < words.length; i++) {
                         builder.append(" ");
                         builder.append(words[i]);
@@ -182,48 +185,135 @@ public class Main {
     }
 
     public static int getIndex(String TableName, String ValueName) {
-        if (TableName.equals("Dialogue")) {
-            if (ValueName.equals("id")) return 0;
-            else if (ValueName.equals("content")) return 1;
-            else if (ValueName.equals("response1")) return 2;
-            else if (ValueName.equals("response2")) return 4;
-            else if (ValueName.equals("emotion")) return 6;
-        } else if (TableName.equals("Guild")) {
-            if (ValueName.equals("id")) return 0;
-            else if (ValueName.equals("name")) return 1;
-            else if (ValueName.equals("description")) return 2;
-            else if (ValueName.equals("founded_year")) return 3;
-        } else if (TableName.equals("Player")) {
-            if (ValueName.equals("id")) return 0;
-            else if (ValueName.equals("first_name")) return 1;
-            else if (ValueName.equals("firstname")) return 1;
-            else if (ValueName.equals("race")) return 2;
-            else if (ValueName.equals("class")) return 3;
-            else if (ValueName.equals("last_login")) return 10;
-        } else if (TableName.equals("Item")) {
-            if (ValueName.equals("id")) return 0;
-            else if (ValueName.equals("item_name")) return 1;
-            else if (ValueName.equals("item_type")) return 2;
-        } else if (TableName.equals("Enemy")) {
-            if (ValueName.equals("id")) return 0;
-            else if (ValueName.equals("enemy_name")) return 1;
-            else if (ValueName.equals("enemy_type")) return 2;
-            else if (ValueName.equals("hitpoints")) return 4;
-            else if (ValueName.equals("warcry")) return 5;
-        } else if (TableName.equals("Team")) {
-            if (ValueName.equals("id")) return 0;
-            else if (ValueName.equals("team_name")) return 1;
-            else if (ValueName.equals("kingdom")) return 2;
-        } else if (TableName.equals("Event")) {
-            if (ValueName.equals("id")) return 0;
-            else if (ValueName.equals("event_name")) return 1;
-            else if (ValueName.equals("event_time")) return 3;
-        } else if (TableName.equals("NPC")) {
-            if (ValueName.equals("id")) return 0;
-            else if (ValueName.equals("npc_type")) return 2;
-            else if (ValueName.equals("first_name")) return 1;
-            else if (ValueName.equals("last_name")) return 1;
-            else if (ValueName.equals("location")) return 3;
+        switch (TableName) {
+            case "Dialogue" -> {
+                switch (ValueName) {
+                    case "id" -> {
+                        return 0;
+                    }
+                    case "content" -> {
+                        return 1;
+                    }
+                    case "response1" -> {
+                        return 2;
+                    }
+                    case "response2" -> {
+                        return 4;
+                    }
+                    case "emotion" -> {
+                        return 6;
+                    }
+                }
+            }
+            case "Guild" -> {
+                switch (ValueName) {
+                    case "id" -> {
+                        return 0;
+                    }
+                    case "name" -> {
+                        return 1;
+                    }
+                    case "description" -> {
+                        return 2;
+                    }
+                    case "founded_year" -> {
+                        return 3;
+                    }
+                }
+            }
+            case "Player" -> {
+                switch (ValueName) {
+                    case "id" -> {
+                        return 0;
+                    }
+                    case "first_name", "firstname" -> {
+                        return 1;
+                    }
+                    case "race" -> {
+                        return 2;
+                    }
+                    case "class" -> {
+                        return 3;
+                    }
+                    case "last_login" -> {
+                        return 10;
+                    }
+                }
+            }
+            case "Item" -> {
+                switch (ValueName) {
+                    case "id" -> {
+                        return 0;
+                    }
+                    case "item_name" -> {
+                        return 1;
+                    }
+                    case "item_type" -> {
+                        return 2;
+                    }
+                }
+            }
+            case "Enemy" -> {
+                switch (ValueName) {
+                    case "id" -> {
+                        return 0;
+                    }
+                    case "enemy_name" -> {
+                        return 1;
+                    }
+                    case "enemy_type" -> {
+                        return 2;
+                    }
+                    case "hitpoints" -> {
+                        return 4;
+                    }
+                    case "warcry" -> {
+                        return 5;
+                    }
+                }
+            }
+            case "Team" -> {
+                switch (ValueName) {
+                    case "id" -> {
+                        return 0;
+                    }
+                    case "team_name" -> {
+                        return 1;
+                    }
+                    case "kingdom" -> {
+                        return 2;
+                    }
+                }
+            }
+            case "Event" -> {
+                switch (ValueName) {
+                    case "id" -> {
+                        return 0;
+                    }
+                    case "event_name" -> {
+                        return 1;
+                    }
+                    case "event_time" -> {
+                        return 3;
+                    }
+                }
+            }
+            case "NPC" -> {
+                switch (ValueName) {
+                    case "id" -> {
+                        return 0;
+                    }
+                    case "npc_type" -> {
+                        return 2;
+                    }
+                    case "first_name", "last_name" -> {
+                        return 1;
+                    }
+                    case "location" -> {
+                        return 3;
+                    }
+                }
+            }
         }
         System.out.println(TableName + " " + ValueName);
         return -1;

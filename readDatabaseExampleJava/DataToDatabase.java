@@ -1,3 +1,5 @@
+package aetheriaDB;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -27,7 +29,7 @@ public class DataToDatabase {
             }
             values.append(");");
 
-            String query = "INSERT INTO " + table + " VALUES " + values.toString();
+            String query = "INSERT INTO " + table + " VALUES " + values;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.executeUpdate();
