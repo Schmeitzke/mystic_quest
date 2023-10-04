@@ -13,19 +13,23 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-
-            String query = "USE aetheria;";
+            System.out.println("Connected to database");
+            String query = "USE aetheriadb;";
+            System.out.println("Using database Aetheria");
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.executeUpdate();
 
-            HashMap<String, LinkedList<String[]>> records = separateEntities("C:\\Users\\benia\\PycharmProjects\\databases\\mystic_quest\\generated_entities.txt");
-            HashMap<String, LinkedList<String[]>> relations = separateRelations("C:\\Users\\benia\\PycharmProjects\\databases\\mystic_quest\\generated_events.txt");
+            HashMap<String, LinkedList<String[]>> records = separateEntities("C:\\Users\\camie\\IdeaProjects\\mystic_quest\\readDatabaseExampleJava\\generated_entities.txt");
+            HashMap<String, LinkedList<String[]>> relations = separateRelations("C:\\Users\\camie\\IdeaProjects\\mystic_quest\\readDatabaseExampleJava\\generated_events.txt");
             String[] TableNames = new String[]{"Event", "Guild", "Enemy", "NPC", "Dialogue", "Item", "Team", "Player"};
             String[] relationNames = new String[]{
                     "item_with_npc", "npc_with_dialogue",
                     "player_with_enemy", "player_with_guild",
                     "player_with_team", "player_with_npc"
             };
+
+            // Fill map with available primary keys
+            PrimaryKeyGetter.fillMap(TableNames, records);
 
             for (String table : TableNames) {
                 LinkedList<String[]> entities = records.get(table);
@@ -34,7 +38,7 @@ public class Main {
                         DataToDatabase.insertData(connection, table, entity);
                     } catch (SQLIntegrityConstraintViolationException e) {
                         int newKey = PrimaryKeyGetter.getNotUsedKey(table);
-
+                        System.out.println(newKey);
                     }
                 }
             }

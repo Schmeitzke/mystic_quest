@@ -34,6 +34,14 @@ public class DataToDatabase {
 
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
+            String errorMessage = e.getMessage(); // Get the error message
+            String sqlState = e.getSQLState(); // Get the SQL state code
+            int errorCode = e.getErrorCode(); // Get the error code
+
+            // You can also print or log the error details
+            System.err.println("Error Message: " + errorMessage);
+            System.err.println("SQL State: " + sqlState);
+            System.err.println("Error Code: " + errorCode);
             throw new SQLIntegrityConstraintViolationException();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,6 +57,7 @@ public class DataToDatabase {
             return true;
         }
     }
+
     public static void fillNulls(String[] data) {
         for (int i = 0; i < data.length; i++) {
             if (data[i] == null) data[i] = "NULL";
