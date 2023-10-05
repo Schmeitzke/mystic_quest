@@ -30,6 +30,19 @@ public class PrimaryKeyGetter {
         }
     }
 
+    /**
+     * This method is used fot testing purposes only
+     */
+    public static void printMapContents() {
+        for (Map.Entry<String, Queue<Integer>> entry : map.entrySet()) {
+            String tableName = entry.getKey();
+            Queue<Integer> keys = entry.getValue();
+            System.out.println("Table: " + tableName);
+            System.out.println("Available Primary Keys: " + keys);
+            System.out.println();
+        }
+    }
+
     public static int getNotUsedKey(String table) {
         Queue<Integer> queue = map.get(table);
         if (queue != null) {

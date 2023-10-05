@@ -27,9 +27,17 @@ public class Main {
                     "player_with_enemy", "player_with_guild",
                     "player_with_team", "player_with_npc"
             };
+            System.out.println("Separated entities and relations");
+
 
             // Fill map with available primary keys
             PrimaryKeyGetter.fillMap(TableNames, records);
+
+            PrimaryKeyGetter.printMapContents();
+
+            System.out.println("Filled map with available primary keys");
+
+            System.out.println("Inserting data into database..."
 
             for (String table : TableNames) {
                 LinkedList<String[]> entities = records.get(table);
@@ -38,7 +46,11 @@ public class Main {
                         DataToDatabase.insertData(connection, table, entity);
                     } catch (SQLIntegrityConstraintViolationException e) {
                         int newKey = PrimaryKeyGetter.getNotUsedKey(table);
-                        System.out.println(newKey);
+                        entity[0] = String.valueOf(newKey);
+                        try {
+                            DataToDatabase.insertData(connection, table, entity);
+                        } catch (SQLIntegrityConstraintViolationException ignored) {
+                        }
                     }
                 }
             }
@@ -52,6 +64,8 @@ public class Main {
                     }
                 }
             }
+
+            System.out.println("Inserting done");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
