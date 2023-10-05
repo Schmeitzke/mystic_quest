@@ -37,7 +37,7 @@ public class Main {
 
             System.out.println("Filled map with available primary keys");
 
-            System.out.println("Inserting data into database..."
+            System.out.println("Inserting data into database...");
 
             for (String table : TableNames) {
                 LinkedList<String[]> entities = records.get(table);
