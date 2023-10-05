@@ -1,22 +1,30 @@
 package aetheriaDB;
 
+import java.sql.*;
 import java.util.*;
 
 public class PrimaryKeyGetter {
     private static final HashMap<String, Queue<Integer>> map = new HashMap<>();
 
-    public static void fillMap(String[] TableNames, HashMap<String, LinkedList<String[]>> records) {
+    public static void fillMap(Connection connection, String[] TableNames) {
         for (String table : TableNames) {
             Queue<Integer> keys = new LinkedList<>(); // Queue which will hold available primary keys
             Set<Integer> existingKeys = new HashSet<>(); // Set to store existing primary keys
 
-            LinkedList<String[]> tableRecords = records.get(table);
-            if (tableRecords != null) {
-                for (String[] record : tableRecords) {
-                    // Assuming the key is in the first column, convert it to an integer and add it to the set
-                    int key = Integer.parseInt(record[0]);
-                    existingKeys.add(key);
+            // Retrieving already used keys
+
+            String query = "Select ID FROM " + table + ";";
+            ResultSet resultSet = null;
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                preparedStatement.executeQuery();
+                resultSet = preparedStatement.getResultSet();
+                while (resultSet.next()) {
+                    existingKeys.add(resultSet.getInt(1));
                 }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
 
             // Add the non-existing keys to the queue
@@ -57,14 +65,3 @@ public class PrimaryKeyGetter {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
