@@ -1,7 +1,10 @@
+package aetheriaDB;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+
 
 public class DataToDatabase {
     public static void insertData(Connection connection, String table, String[] data) throws SQLIntegrityConstraintViolationException {
@@ -32,7 +35,8 @@ public class DataToDatabase {
 
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new SQLIntegrityConstraintViolationException();
+            e.printStackTrace();
+            throw e;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -47,6 +51,7 @@ public class DataToDatabase {
             return true;
         }
     }
+
     public static void fillNulls(String[] data) {
         for (int i = 0; i < data.length; i++) {
             if (data[i] == null) data[i] = "NULL";

@@ -14,8 +14,8 @@ public class Main {
     public static void main(String[] args) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             System.out.println("Connected to database");
-            String query = "USE aetheriadb;";
-            System.out.println("Using database Aetheria");
+            String query = "USE aetheriaProject;";
+            System.out.println("Using database aetheriaProject");
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.executeUpdate();
 
@@ -118,7 +118,7 @@ public class Main {
                 {"Dialogue", "7"},
                 {"Guild", "4"},
                 {"Player", "11"},
-                {"Item", "10"},
+                {"Item", "11"},
                 {"Enemy", "6"},
                 {"Team", "3"},
                 {"Event", "4"},
@@ -247,11 +247,15 @@ public class Main {
             else if (ValueName.equals("firstname")) return 1;
             else if (ValueName.equals("race")) return 2;
             else if (ValueName.equals("class")) return 3;
+            else if (ValueName.equals("experience_points")) return 4;
+            else if (ValueName.equals("gold")) return 5;
             else if (ValueName.equals("last_login")) return 10;
         } else if (TableName.equals("Item")) {
             if (ValueName.equals("id")) return 0;
             else if (ValueName.equals("item_name")) return 1;
             else if (ValueName.equals("item_type")) return 2;
+            else if (ValueName.equals("rarity")) return 3;
+            else if (ValueName.equals("referenceValue")) return 4;
         } else if (TableName.equals("Enemy")) {
             if (ValueName.equals("id")) return 0;
             else if (ValueName.equals("enemy_name")) return 1;
