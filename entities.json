@@ -178,6 +178,10 @@
                 {
                     "name": "event_time",
                     "datatype": "int"
+                },
+                {
+                    "name": "reward",
+                    "datatype": "int"
                 }
             ]
         },

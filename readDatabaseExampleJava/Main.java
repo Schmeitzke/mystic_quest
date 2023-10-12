@@ -269,6 +269,7 @@ public class Main {
         } else if (TableName.equals("Event")) {
             if (ValueName.equals("id")) return 0;
             else if (ValueName.equals("event_name")) return 1;
+            else if (ValueName.equals("reward")) return 2;
             else if (ValueName.equals("event_time")) return 3;
         } else if (TableName.equals("NPC")) {
             if (ValueName.equals("id")) return 0;
